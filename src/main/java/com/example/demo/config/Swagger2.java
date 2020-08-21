@@ -26,6 +26,11 @@ import  springfox.documentation.swagger2.annotations.EnableSwagger2;
 //@ConditionalOnProperty(name="swagger.enable",havingValue = "true")
 public class Swagger2 implements WebMvcConfigurer {
 //public class Swagger2 extends WebMvcConfigurationSupport {
+
+    /**
+     * 继承WebMvcConfigurationSupport类以后，拦截器变成手动，WebMvcConfigurer类是自动，无法自动加载，这两个冲突
+     * @return
+     */
     //swagger2的配置文件,这里可以配置swagger2的一些基本的内容，比如扫描的包等等
     @Bean
     public Docket createRestApi(){
