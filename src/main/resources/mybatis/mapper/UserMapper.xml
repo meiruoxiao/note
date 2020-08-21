@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+SQL 映射文件有很少的几个顶级元素（按照它们应该被定义的顺序）：
+
+cache – 给定命名空间的缓存配置。
+cache-ref – 其他命名空间缓存配置的引用。
+resultMap – 是最复杂也是最强大的元素，用来描述如何从数据库结果集中来加载对象。
+parameterMap – 已废弃！老式风格的参数映射。内联参数是首选,这个元素可能在将来被移除，这里不会记录。
+sql – 可被其他语句引用的可重用语句块。
+insert – 映射插入语句
+update – 映射更新语句
+delete – 映射删除语句
+select – 映射查询语句-->
+
+<!--namespace是命名空间，是mapper接口的全路径-->
+<mapper namespace="com.example.demo.dao.UserMapper">
+ 
+    <!--resultMap – 是最复杂也是最强大的元素，用来描述如何从数据库结果集中来加载对象-->
+    <!--column-数据库字段--><!--property-entity实体类字段-->
+    <resultMap id="userResultMap" type="com.example.demo.entity.User">
+        <id property="id" column="userid"></id>
+        <result property="name" column="name"/>
+        <result property="pwd" column="password"/>
+    </resultMap>
+ 
+    <!--sql – 可被其他语句引用的可重用语句块-->
+    <sql id="colums">
+        userid,name,password
+    </sql>
+ 
+    <select id="findAll" resultMap="userResultMap">
+        select
+        <include refid="colums" />
+        from  user
+    </select>
+ 
+    <select id="findById" resultMap="userResultMap">
+        select
+        <include refid="colums" />
+        from  user
+        where  userid=#{id}
+    </select>
+ 
+   <!-- <insert id="insert" parameterType="com.example.demo.entity.User" >
+       INSERT INTO
+            user
+            (name,age,pwd)
+        VALUES
+            (#{name}, #{age}, #{pwd})
+    </insert>-->
+ 
+    <update id="update" parameterType="com.example.demo.entity.User" >
+        UPDATE
+        users
+        SET
+        <if test="name != null">name = #{name},</if>
+        <if test="pwd != null">password = #{pwd},</if>
+        name = #{name}
+        WHERE
+        userid = #{id}
+    </update>
+ 
+   <!-- <delete id="delete" parameterType="java.lang.Long" >
+       DELETE FROM
+             user
+       WHERE
+             id =#{id}
+    </delete>
+ -->
+</mapper>
