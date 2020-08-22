@@ -29,9 +29,19 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         logger.info("拦截器SSS");
         // 拦截所有请求，通过判断是否有 @LoginToken注解 决定是否需要登录
+        registry.addInterceptor(interceptor).addPathPatterns("/**")
+                .excludePathPatterns("/**/user/login","/error")
+                .excludePathPatterns("/**/swagger-ui.html",
+                        "/**/webjars/springfox-swagger-ui/**",
+                        "/**/swagger-resources/**");
+//               "/**/webjars/springfox-swagger-ui/css/typography.css",
+//                "/**/webjars/springfox-swagger-ui/images/favicon-32x32.png",
+//                "/**/swagger-resources"
+//                "/**/swagger-resources/configuration/ui",
+//                "/**/null/swagger-resources/configuration/ui",
+        // 拦截所有请求，通过判断是否有 @LoginToken注解 决定是否需要登录
 //        registry.addInterceptor(authenticationInterceptor()).addPathPatterns("/**");
-        registry.addInterceptor(authenticationInterceptor).addPathPatterns("/**")
-                .excludePathPatterns("/hello/login");
+
 
     }
 

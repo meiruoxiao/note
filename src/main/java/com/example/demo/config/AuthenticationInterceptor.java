@@ -31,6 +31,9 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        System.out.println("++++++++++++++++++");
+        System.out.println(request.getServletPath());//打印具体请求地址
+        System.out.println("+++++++++++++++++++++");
 
         // 从 http 请求头中取出 token
         String token = request.getHeader("token");
@@ -48,33 +51,33 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             if (loginToken.required()) {
                 return true;
             }
-        }
-        //检查有没有需要用户权限的注解
-        if (method.isAnnotationPresent(LoginToken.class)) {
-            LoginToken checkToken = method.getAnnotation(LoginToken.class);
-            if (checkToken.required()) {
-                // 执行认证
-                if (token == null) {
-                    //throw new RuntimeException("无token，请重新登录");
-                    //未登录，跳转到登录页面
-                    response.sendRedirect(request.getContextPath()+"/login");
-                    return true;
-                }
-                // 获取 token 中的 userId
-                long userId = JWTUtil.getUserId(token);
+        }else if (token == null) {
+            response.sendRedirect(request.getContextPath() + "/user/login");
+            return true;
+        }else{
 
-//                User user = userService.getById(userId);
-                //当token还存在，但是用户已经删除，token还未到失效时间
-                if (userService.getById(userId) == null) {
-                    throw new RuntimeException("用户不存在，请重新登录");
-                }
-//                Boolean verify = JWTUtil.verify(token);
-                //当token验证不对，拒绝访问
-                if (!JWTUtil.verify(token)) {
-                    throw new RuntimeException("非法访问！");
-                }
-                return true;
+
+
+        //检查有没有需要用户权限的注解
+//        if (method.isAnnotationPresent(LoginToken.class)) {
+//            LoginToken checkToken = method.getAnnotation(LoginToken.class);
+//            if (checkToken.required()) {
+                // 执行认证
+//                if (token == null) {
+//                    response.sendRedirect(request.getContextPath() + "/user/login");
+//                    return true;
+//                }
+                // 获取 token 中的 userId
+            long userId = JWTUtil.getUserId(token);
+            User user = userService.getById(userId);
+            if (user == null) {
+                throw new RuntimeException("用户不存在，请重新登录");
             }
+            Boolean verify = JWTUtil.verify(token);
+            if (!verify) {
+                throw new RuntimeException("非法访问！");
+            }
+            return true;
         }
         return true;
     }

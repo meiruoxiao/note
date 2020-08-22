@@ -31,7 +31,7 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(path = "/user", method = RequestMethod.GET)
-    @LoginToken
+//    @LoginToken
     public Object index() {
         User user = new User();
         user.setName("Adam");
@@ -45,7 +45,7 @@ public class UserController {
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     @ApiOperation(value = "登录", notes = "根据用户名和密码登录，返回token")
-    @PassToken
+//    @PassToken
     public R login(HttpServletRequest request,
                    @RequestParam(value = "name") String userName,
                    @RequestParam(value = "pwd") String passWord) {
@@ -71,7 +71,7 @@ public class UserController {
 
     @RequestMapping(path = "/all", method = RequestMethod.GET)
     @ApiOperation(value = "查询所有用户")
-    @LoginToken
+//    @LoginToken
     public Object all() {
         List<Map<String, Object>> list;
 //		list=userService.listMaps();

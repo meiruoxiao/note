@@ -3,7 +3,7 @@ package com.example.demo.annotation;
 import java.lang.annotation.*;
 
 /**
- * .
+ * 白名单注解，跳过token认证.
  *
  * @author Mei Ruoxiao
  * @since 2020/8/20
